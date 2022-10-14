@@ -1,5 +1,4 @@
 #include <Argon2/Argon2.hpp>
-#include <argon2.h>
 #include <cstring>
 #include <gtest/gtest.h>
 

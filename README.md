@@ -1,5 +1,7 @@
 # Argon2-Hpp
 
+[![CMake](https://github.com/AlexGarrity/Argon2-Hpp/actions/workflows/cmake.yml/badge.svg?branch=master)](https://github.com/AlexGarrity/Argon2-Hpp/actions/workflows/cmake.yml)
+
 Argon2-Hpp is a simple C++ wrapper library for the Argon2 reference C implementation.
 
 ## Interface
