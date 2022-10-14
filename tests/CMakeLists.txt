@@ -9,6 +9,9 @@ set(gtest_force_shared_crt
     ON
     CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+set(INSTALL_GTEST
+    OFF
+    CACHE BOOL "" FORCE)
 
 add_executable(argon2-hpp-tests)
 target_sources(argon2-hpp-tests PRIVATE TestArgon2-Hpp.cpp)
