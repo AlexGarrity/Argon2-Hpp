@@ -70,5 +70,5 @@ int main(void)
 Good question.  And one that I don't have a particularly good answer for.  I guess this is lighter?
 
 ## Licensing
-The (Argon2 reference implementation)[https://github.com/P-H-C/phc-winner-argon2] is dual licensed under the CC0 License and Apache 2.0 License and, in this case, used under the CC0 License.
+The [Argon2 reference implementation](https://github.com/P-H-C/phc-winner-argon2) is dual licensed under the CC0 License and Apache 2.0 License and, in this case, used under the CC0 License.
 It felt appropriate to follow suit, so this wrapper library is also dual licensed under CC0 and Apache 2.0.  For more details, see the LICENSE file.
