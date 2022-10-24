@@ -58,7 +58,7 @@ namespace Argon2
 
 	auto i_hash_encoded(const std::uint32_t t_cost, const std::uint32_t m_cost, const std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, const std::size_t hashlen, std::string& encoded) -> ErrorCodes
 	{
-		char enc[encoded.size()];
+		char *enc = new char[encoded.size()];
 		auto errorCode = argon2i_hash_encoded(
 		    t_cost,
 		    m_cost,
@@ -82,7 +82,7 @@ namespace Argon2
 
 	auto d_hash_encoded(const std::uint32_t t_cost, const std::uint32_t m_cost, const std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, const std::size_t hashlen, std::string& encoded) -> ErrorCodes
 	{
-		char enc[encoded.size()];
+		char *enc = new char[encoded.size()];
 		auto errorCode = argon2d_hash_encoded(
 		    t_cost,
 		    m_cost,
@@ -106,7 +106,7 @@ namespace Argon2
 
 	auto id_hash_encoded(const std::uint32_t t_cost, const std::uint32_t m_cost, const std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, const std::size_t hashlen, std::string& encoded) -> ErrorCodes
 	{
-		char enc[encoded.size()];
+		char *enc = new char[encoded.size()];
 		auto errorCode = argon2id_hash_encoded(
 		    t_cost,
 		    m_cost,
