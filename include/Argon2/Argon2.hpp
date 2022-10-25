@@ -8,6 +8,30 @@
 #include <string>
 #include <vector>
 
+#if defined(_WIN32)
+// Windows
+#	if defined(_EXPORT_ARGON2_HPP)
+// MinGW
+#		if defined(_MSC_VER)
+#			define ARGON2_HPP_API __declspec(dllexport)
+// MSVC
+#		else
+#			define ARGON2_HPP_API __attribute__((dllexport))
+#		endif
+#	else
+// MinGW
+#		if defined(_MSC_VER)
+#			define ARGON2_HPP_API __declspec(dllimport)
+// MSVC
+#		else
+#			define ARGON2_HPP_API __attribute__((dllimport))
+#		endif
+#	endif
+// Not Windows
+#else
+#	define ARGON2_HPP_API __attribute__((visibility("default")))
+#endif
+
 namespace Argon2
 {
 	/*
@@ -65,7 +89,7 @@ namespace Argon2
 	};
 
 	/* Error codes */
-	enum class ErrorCodes
+	enum class ARGON2_HPP_API ErrorCodes
 	{
 		Ok = argon2_error_codes::ARGON2_OK,
 
@@ -123,7 +147,7 @@ namespace Argon2
 	};
 
 	/* Argon2 primitive type */
-	enum class Type
+	enum class ARGON2_HPP_API Type
 	{
 		Argon2d  = argon2_type::Argon2_d,
 		Argon2i  = argon2_type::Argon2_i,
@@ -131,7 +155,7 @@ namespace Argon2
 	};
 
 	/* Version of the algorithm */
-	enum class Version : std::uint32_t
+	enum class ARGON2_HPP_API Version : std::uint32_t
 	{
 		Version10     = argon2_version::ARGON2_VERSION_10,
 		Version13     = argon2_version::ARGON2_VERSION_13,
@@ -165,7 +189,7 @@ namespace Argon2
 	 * Then you initialize:
 	 Argon2_Context(out,8,pwd,32,salt,16,NULL,0,NULL,0,5,1<<20,4,4,NULL,NULL,true,false,false,false)
 	 */
-	struct Context
+	struct ARGON2_HPP_API Context
 	{
 		std::vector<std::uint8_t>& out;
 		std::vector<std::uint8_t>& pwd;
@@ -194,14 +218,14 @@ namespace Argon2
 	 * @param uppercase Whether the string should have the first letter uppercase
 	 * @return Empty string if invalid type, otherwise the string representation.
 	 */
-	auto type2string(Type type, bool uppercase) -> std::string;
+	ARGON2_HPP_API auto type2string(Type type, bool uppercase) -> std::string;
 
 	/*
 	 * Function that performs memory-hard hashing with certain degree of parallelism
 	 * @param  context  Reference to the Argon2 internal structure
 	 * @return Error code if smth is wrong, ErrorCodes::Ok otherwise
 	 */
-	auto ctx(Context& context, Type type) -> ErrorCodes;
+	ARGON2_HPP_API auto ctx(Context& context, Type type) -> ErrorCodes;
 
 	/**
 	 * Hashes a password with Argon2i, producing an encoded hash
@@ -215,7 +239,7 @@ namespace Argon2
 	 * @pre   Different parallelism levels will give different results
 	 * @pre   Returns ErrorCodes::Ok if successful
 	 */
-	auto i_hash_encoded(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::size_t hashlen, std::string& encoded) -> ErrorCodes;
+	ARGON2_HPP_API auto i_hash_encoded(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::size_t hashlen, std::string& encoded) -> ErrorCodes;
 
 	/**
 	 * Hashes a password with Argon2i, producing a raw hash at @hash
@@ -228,20 +252,20 @@ namespace Argon2
 	 * @pre   Different parallelism levels will give different results
 	 * @pre   Returns ErrorCodes::Ok if successful
 	 */
-	auto i_hash_raw(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::vector<std::uint8_t>& hash)
+	ARGON2_HPP_API auto i_hash_raw(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::vector<std::uint8_t>& hash)
 	    -> ErrorCodes;
 
-	auto d_hash_encoded(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::size_t hashlen, std::string& encoded) -> ErrorCodes;
+	ARGON2_HPP_API auto d_hash_encoded(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::size_t hashlen, std::string& encoded) -> ErrorCodes;
 
-	auto d_hash_raw(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::vector<std::uint8_t>& hash)
+	ARGON2_HPP_API auto d_hash_raw(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::vector<std::uint8_t>& hash)
 	    -> ErrorCodes;
 
-	auto id_hash_encoded(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::size_t hashlen, std::string& encoded) -> ErrorCodes;
+	ARGON2_HPP_API auto id_hash_encoded(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::size_t hashlen, std::string& encoded) -> ErrorCodes;
 
-	auto id_hash_raw(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::vector<std::uint8_t>& hash) -> ErrorCodes;
+	ARGON2_HPP_API auto id_hash_raw(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, std::vector<std::uint8_t>& hash) -> ErrorCodes;
 
 	/* generic function underlying the above ones */
-	auto hash(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, const std::vector<std::uint8_t>& hash, std::string& encoded, Type type, Version version) -> ErrorCodes;
+	ARGON2_HPP_API auto hash(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, const std::vector<std::uint8_t>& pwd, const std::vector<std::uint8_t>& salt, const std::vector<std::uint8_t>& hash, std::string& encoded, Type type, Version version) -> ErrorCodes;
 
 	/**
 	 * Verifies a password against an encoded string
@@ -250,13 +274,13 @@ namespace Argon2
 	 * @param pwd Vector containing the password
 	 * @pre   Returns ARGON2_OK if successful
 	 */
-	auto i_verify(const std::string& encoded, const std::vector<std::uint8_t>& pwd)
+	ARGON2_HPP_API auto i_verify(const std::string& encoded, const std::vector<std::uint8_t>& pwd)
 	    -> ErrorCodes;
-	auto d_verify(const std::string& encoded, const std::vector<std::uint8_t>& pwd)
+	ARGON2_HPP_API auto d_verify(const std::string& encoded, const std::vector<std::uint8_t>& pwd)
 	    -> ErrorCodes;
-	auto id_verify(const std::string& encoded, const std::vector<std::uint8_t>& pwd)
+	ARGON2_HPP_API auto id_verify(const std::string& encoded, const std::vector<std::uint8_t>& pwd)
 	    -> ErrorCodes;
-	auto verify(const std::string& encoded, const std::vector<std::uint8_t>& pwd, Type type) -> ErrorCodes;
+	ARGON2_HPP_API auto verify(const std::string& encoded, const std::vector<std::uint8_t>& pwd, Type type) -> ErrorCodes;
 
 	/**
 	 * Argon2d: Version of Argon2 that picks memory blocks depending
@@ -266,7 +290,7 @@ namespace Argon2
 	 * @param  context  Reference to current Argon2 context
 	 * @return  ErrorCodes::Ok if successful, an error code otherwise
 	 */
-	auto d_ctx(Context& context) -> ErrorCodes;
+	ARGON2_HPP_API auto d_ctx(Context& context) -> ErrorCodes;
 
 	/**
 	 * Argon2i: Version of Argon2 that picks memory blocks
@@ -276,7 +300,7 @@ namespace Argon2
 	 * @param  context  Reference to current Argon2 context
 	 * @return  ErrorCodes::Ok if successful, an error code otherwise
 	 */
-	auto i_ctx(Context& context) -> ErrorCodes;
+	ARGON2_HPP_API auto i_ctx(Context& context) -> ErrorCodes;
 
 	/**
 	 * Argon2id: Version of Argon2 where the first half-pass over memory is
@@ -287,7 +311,7 @@ namespace Argon2
 	 * @param  context  Reference to current Argon2 context
 	 * @return  ErrorCodes::Ok if successful, an error code otherwise
 	 */
-	auto id_ctx(Context& context) -> ErrorCodes;
+	ARGON2_HPP_API auto id_ctx(Context& context) -> ErrorCodes;
 
 	/**
 	 * Verify if a given password is correct for Argon2d hashing
@@ -295,7 +319,7 @@ namespace Argon2
 	 * @param  hash  The password hash to verify
 	 * @return  ErrorCodes::Ok if successful, an error code otherwise
 	 */
-	auto d_verify_ctx(Context& context, const std::string& hash) -> ErrorCodes;
+	ARGON2_HPP_API auto d_verify_ctx(Context& context, const std::string& hash) -> ErrorCodes;
 
 	/**
 	 * Verify if a given password is correct for Argon2i hashing
@@ -303,7 +327,7 @@ namespace Argon2
 	 * @param  hash  The password hash to verify
 	 * @return  Zero if successful, a non zero error code otherwise
 	 */
-	auto i_verify_ctx(Context& context, const std::string& hash) -> ErrorCodes;
+	ARGON2_HPP_API auto i_verify_ctx(Context& context, const std::string& hash) -> ErrorCodes;
 
 	/**
 	 * Verify if a given password is correct for Argon2id hashing
@@ -311,17 +335,17 @@ namespace Argon2
 	 * @param  hash  The password hash to verify
 	 * @return  Zero if successful, a non zero error code otherwise
 	 */
-	auto id_verify_ctx(Context& context, const std::string& hash) -> ErrorCodes;
+	ARGON2_HPP_API auto id_verify_ctx(Context& context, const std::string& hash) -> ErrorCodes;
 
 	/* generic function underlying the above ones */
-	auto verify_ctx(Context& context, const std::string& hash, Type type)
+	ARGON2_HPP_API auto verify_ctx(Context& context, const std::string& hash, Type type)
 	    -> ErrorCodes;
 
 	/**
 	 * Get the associated error message for given error code
 	 * @return  The error message associated with the given error code
 	 */
-	auto error_message(ErrorCodes error_code) -> std::string;
+	ARGON2_HPP_API auto error_message(ErrorCodes error_code) -> std::string;
 
 	/**
 	 * Returns the encoded hash length for the given input parameters
@@ -333,6 +357,6 @@ namespace Argon2
 	 * @param type The Type that we want the encoded length for
 	 * @return  The encoded hash length in bytes
 	 */
-	auto encodedlen(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, std::uint32_t saltlen, std::uint32_t hashlen, Type type) -> std::size_t;
+	ARGON2_HPP_API auto encodedlen(std::uint32_t t_cost, std::uint32_t m_cost, std::uint32_t parallelism, std::uint32_t saltlen, std::uint32_t hashlen, Type type) -> std::size_t;
 
 } // namespace Argon2
