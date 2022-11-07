@@ -42,7 +42,11 @@ target_include_directories(argon2-hpp
                            PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(argon2-hpp PUBLIC argon2)
-target_compile_definitions(argon2-hpp PRIVATE _EXPORT_ARGON2_HPP=TRUE)
+set_target_properties(argon2-hpp PROPERTIES VERSION 1.0.3 SOVERSION 1)
+target_compile_definitions(
+  argon2-hpp PRIVATE _EXPORT_ARGON2_HPP=TRUE
+                        _BUILD_SHARED=$<IF:$<STREQUAL:$<TARGET_PROPERTY:argon2-hpp,TYPE>,SHARED_LIBRARY>,TRUE,FALSE>)
+
 
 set_target_properties(argon2-hpp PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
